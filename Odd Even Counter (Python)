@@ -1,0 +1,29 @@
+import random
+
+def OddEven():
+
+   even=0
+
+   odd=0
+
+   for x in range (100):
+
+       num=random.randint(0,100)
+
+       if num%2==0:
+
+           even+=1
+
+       else:
+
+           odd+=1
+
+   print("Even Numbers:")
+
+   print(even)
+
+   print("Odd Numbers:")
+
+   print(odd)
+
+OddEven()
