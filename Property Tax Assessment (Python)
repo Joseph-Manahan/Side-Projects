@@ -1,0 +1,17 @@
+def PropertyTax():
+
+   actual_value=float(input("Actual value of property: $"))
+
+   assessment_value=actual_value*0.6
+
+   property_tax=assessment_value*0.0072
+
+   print_property_tax(assessment_value,property_tax)
+
+def print_property_tax(assessment_value,property_tax):
+
+   print("Assessment value: ${:0.2f}".format(assessment_value))
+
+   print("Property tax: ${:0.2f}".format(property_tax))
+
+PropertyTax()
