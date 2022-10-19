@@ -1,0 +1,51 @@
+public class ArraySortByFirst
+{
+	public static void sortByFirst(int[][] data)
+	{
+		//Scans each row
+		for (int i=0;i<data.length;i++) {
+			//Scans each column
+			for (int j=0;j<data.length;j++) {
+				if (data[j][0] > data[i][0]) {
+
+				//Switches the value of the first value in the row to make an ascending order
+				int[] sort = data[j];
+				data[j] = data[i];
+				data[i] = sort;
+					}
+				}
+			}
+		}
+
+	public static void display(int[][] data)
+	{
+		//Scans through the array to print out the display
+		for (int i=0; i<data.length; i++) {
+			for (int j=0; j<data.length; j++) {
+				System.out.print("\t"+data[i][j]+" ");
+			}
+			System.out.println();
+		}
+	}
+
+	//
+	// Please do not change any code in the main method
+	//
+	public static void main(String args[])
+	{
+		int array[][] = {{1, 2, 3, 4, 5}, 
+				 {3, 4, 5, 1, 2}, 
+				 {5, 2, 3, 4, 1}, 
+				 {2, 3, 1, 4, 5}, 
+				 {4, 2, 3, 1, 5}};
+
+		System.out.println("The array is initially " );
+		display(array);
+		System.out.println();
+
+		sortByFirst(array);
+		System.out.println("The array after sorting is " );
+		display(array);
+		System.out.println();
+	}
+}
