@@ -1,0 +1,64 @@
+//PascalsTriangleDriver.java
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class PascalsTriangleDriver {
+
+    private static String goodbye = "Adiós!";
+
+    public static void main(String args[]) {
+        int rowNum = getRowNum();
+
+        while (rowNum >= 0) {
+            PascalsTriangleGenerator p = new PascalsTriangleGenerator();
+            int[] row = p.computeRow(rowNum + 1);
+            for (int num : row) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+            rowNum = getRowNum();
+        }
+        System.out.println(goodbye);
+    }
+
+    private static int getRowNum() throws InputMismatchException {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter a row of Pascal's Triangle: ");
+        int rowNum = -1;
+        try {
+            rowNum = input.nextInt();
+            input.nextLine();
+        } catch (InputMismatchException e) {
+            System.err.println(goodbye);
+            System.exit(1);
+        } finally {
+            // System.out.println("InputMismatchException handled.");
+        }
+        return rowNum;
+    }
+}
+//PascalsTriangleGenerator.java
+public class PascalsTriangleGenerator {
+
+    public PascalsTriangleGenerator() {
+    }
+
+    public int[] computeRow(int rowToCompute) {
+        if (rowToCompute == 1) {
+            return new int [] {1};
+        } else {
+            int lastRow [] = computeRow(rowToCompute-1);
+            int newRow [] = new int [lastRow.length+1];
+
+            newRow[0]=1;
+            newRow[newRow.length-1]=1;
+
+            for (int i=0; i<lastRow.length-1; i++) {
+                newRow[i+1] = lastRow[i] + lastRow[i+1];
+            }
+
+            return newRow;
+        }
+    }
+
+}
