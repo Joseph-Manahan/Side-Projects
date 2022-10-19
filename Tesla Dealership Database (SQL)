@@ -1,0 +1,1239 @@
+/*DEALERSHIP*/
+
+ 
+
+Drop Table IF EXISTS ORDER_CONTAINS;
+
+Drop Table IF EXISTS CUSTOMER_ORDER;
+
+Drop Table IF EXISTS CUSTOMER;
+
+Drop Table IF EXISTS VEHICLE;
+
+Drop Table IF EXISTS EMPLOYEE;
+
+Drop Table IF EXISTS DEALERSHIP;
+
+ 
+
+ 
+
+ 
+
+CREATE TABLE DEALERSHIP (DealershipID integer, 
+DealershipName varchar(50), 
+StreetAddress varchar(30), 
+City varchar(20), 
+ZipCode integer, 
+State varchar(15), 
+PhoneNumber VARCHAR(14), 
+Email varchar(50), 
+NumberOfChargers integer, 
+SqrFootage integer,
+
+Constraint Dealership_PK Primary Key (DealershipID)
+
+);
+
+ 
+
+ 
+
+ 
+
+ 
+
+CREATE TABLE VEHICLE (
+            VIN varchar(25),
+            VehicleModel varchar(15),
+            VehicleYear integer,
+            VehicleColor varchar(15), 
+VehicleMileage integer, 
+VehiclePrice integer, 
+BatteryType varchar(15), 
+NumberofDoors integer, 
+DateReceived varchar(20),
+Constraint Vehicle_PK Primary Key (VIN)
+
+              )
+
+;
+
+ 
+
+ 
+
+CREATE TABLE EMPLOYEE (EmployeeId integer,
+    DealershipID integer,
+    FirstName varchar(15),
+    LastName varchar(20),
+    DateOfBirth varchar(15),
+    StreetAddress varchar(50),
+    City varchar(50),
+    ZipCode integer,
+    PhoneNumber VARCHAR(14),
+    Salary DECIMAL(8,2),
+    Commission integer,
+Constraint Employee_PK Primary Key (EmployeeID),
+Constraint Employee_Dealership_FK Foreign Key (DealershipID) References DEALERSHIP (DealershipID)
+);
+
+ 
+
+ 
+
+CREATE TABLE CUSTOMER (CustomerID integer,
+              EmployeeID integer,
+              FirstName varchar(15),
+              LastName varchar(15),
+              StreetAddress varchar(30),
+              City varchar(20),
+              ZipCode integer,
+              State varchar(15),
+              PhoneNumber varchar(14),
+       	      Email varchar(50), 
+       	      Constraint Customer_PK Primary Key (CustomerID),
+              Constraint CUSTOMER_FK Foreign Key (EmployeeID) References EMPLOYEE (EmployeeID)
+              )
+
+;
+
+ 
+ 
+
+CREATE TABLE CUSTOMER_ORDER(
+              CustomerOrderID integer,
+              DealershipID int,
+              CustomerID int,
+              OrderType varchar(15),
+       	  CustomerOrderDate varchar(15),
+              CustomerOrderDue varchar(15),
+              CustomerOrderBilling varchar(30),
+              Constraint CustomerOrder_PK Primary Key (CustomerOrderID),
+              Constraint CustomerOrder_Dealership_FK Foreign Key (DealershipID) References DEALERSHIP (DealershipID),
+              Constraint CustomerOrder_Customer_FK Foreign Key (CustomerID) References CUSTOMER (CustomerID)
+              )
+
+;
+
+ 
+
+ 
+
+ 
+
+CREATE TABLE ORDER_CONTAINS (
+              CustomerOrderID integer,
+              VIN VARCHAR(17),
+              Constraint ORDER_CONTAINS_PK Primary Key (CustomerOrderID, VIN),
+              Constraint ORDER_CONTAINS_VIN_ForeignKey Foreign Key (VIN) References Vehicle (VIN),
+              Constraint ORDER_CONTAINS_OrderID_FK Foreign Key (CustomerOrderID) References Customer_Order (CustomerOrderID)
+              )
+
+;
+
+
+/*Load*/
+
+
+INSERT INTO DEALERSHIP VALUES (101, 'Serramonte Tesla', '1500 Collins Ave', 'Colma', 94014, 'California', 6504882984, 'colma_ordersupport@tesla.com', 4, 21034);
+
+
+INSERT INTO DEALERSHIP VALUES (102, 'Burlingame Tesla', '50 Edwards Court', 'Burlingame', 94010, 'California', 6503421176, 'burlingame_ordersupport@tesla.com', 12, 26132);  
+
+
+INSERT INTO DEALERSHIP VALUES (103, 'Los Angeles Tesla', '1200 Dog Street', 'Los Angeles',  93012, 'California', 6614021020, 'LosAngelas_ordersupport@tesla.com', 8, 40123);
+
+
+
+
+SELECT * FROM DEALERSHIP;
+
+
+
+
+INSERT INTO VEHICLE VALUES ('WBAFF02010LJ14669', 'Model S', 2022, 'White', 375, 93740, 'Dual Motor', 4, '2022-01-05');
+
+
+INSERT INTO VEHICLE VALUES ('1B7HF13Y2WJ198530', 'Model Y', 2022, 'Blue', 330, 62990, 'Dual Motor', 4, '2022-03-07');   
+
+
+INSERT INTO VEHICLE VALUES ('JKBVNKD167A013982', 'Model X', 2022, 'Black', 333, 138990, 'Tri Motor', 4, '2022-04-15'); 
+
+
+INSERT INTO VEHICLE VALUES ('WP0AC29945S692185', 'Model S Plaid', 2021, 'Blue', 396, 135990, 'Tri Motor', 4, '2021-07-23'); 
+
+
+INSERT INTO VEHICLE VALUES ('1GNDS13S132266223', 'Model X', 2022, 'White', 351, 138990, 'Tri Motor', 4, '2022-02-17'); 
+
+
+INSERT INTO VEHICLE VALUE ('1FAFP66L0WK258659' , 'Model 3', 2020, 'Silver', 370, 452353, 'Dual Motor', 4, '2021-06-22');
+
+
+INSERT INTO VEHICLE VALUE ('SCBBR53W36C034889', 'Model S', 2022, 'White', 450, 234723, 'Tri Motor', 4, '2021-05-14');
+
+
+INSERT INTO VEHICLE VALUE ('JH4NA1261PT000302', 'Model Y', 2021, 'Black', 369, 451945, 'Dual Motor', 4, '2020-03-11');
+
+
+INSERT INTO VEHICLE VALUE ('2HGES15252H603204', 'Model X', 2022, 'Red', 237, 139012, 'Tri Motor', 4, '2022-02-22');
+
+
+INSERT INTO VEHICLE VALUE ('JH4KA3270LC001300', 'Model 3', 2022, 'White', 451, 134091, 'Dual Motor', 4, '2021-03-22');
+
+
+INSERT INTO VEHICLE VALUE ('JM1BF2325G0V37585', 'Model S', 2021, 'Silver', 821, 519378, 'Dual Motor', 4 ,'2021-06-21');
+
+
+INSERT INTO VEHICLE VALUE ('WDBAB23ADCB324720', 'Model Y', 2020, 'Blue', 412, 834978, 'Dual Motor', 4, '2021-06-21');
+
+
+INSERT INTO VEHICLE VALUE ('JH4DB7540RS001911', 'Model X', 2022, 'Black', 318, 935234, 'Tri Motor', 4, '2022-05-26');
+
+
+INSERT INTO VEHICLE VALUE ('WD5WD641525381291', 'Model 3', 2021, 'Red', 624,  708375, 'Tri Motor', 4, '2020-09-30');
+
+
+INSERT INTO VEHICLE VALUE ('WT1WX124029301231', 'Model S', 2020, 'White', 353,  709175, 'Dual Motor', 4 ,'2022-04-12');
+
+
+INSERT INTO VEHICLE VALUE ('JTHBP5C21B5009664', 'Model 3', 2021, 'Black', 415, 315234, 'Tri Motor', 4, '2021-05-23');
+
+
+INSERT INTO VEHICLE VALUE ('1GNEK13T7YJ204464', 'Model X', 2021, 'Blue', 310, 
+932334, 'Tri Motor', 4, '2022-09-21');
+
+
+INSERT INTO VEHICLE VALUE ('JH4KA7680RC011845', 'Model S', 2022, 'White', 211,
+138232, 'Dual Motor', 4, '2021-03-13');
+
+
+INSERT INTO VEHICLE VALUE ('1J4GZ58S7VC697710', 'Model 3', 2020, 'Black', 398, 912234, 'Tri Motor', 4, '2022-02-01');
+
+
+INSERT INTO VEHICLE VALUE ('1G8ZH528X2Z310309', 'Model X', 2021, 'Blue', 210, 451334, 'Tri Motor', 4, '2021-04-14');
+
+
+
+
+
+
+SELECT * FROM VEHICLE;
+
+
+
+
+INSERT INTO EMPLOYEE VALUES (201, 101, 'Mickey', 'Mouse', '01/01/1990', '1234 Sesame Street', 'San Francisco', 94017, '6505555555', 100000, 5000);
+
+
+INSERT INTO EMPLOYEE VALUES (202, 102, 'John', 'Smith', '05/07/1984', '552 Dream Street', 'Burlingame', 94010, '4157824343', 65000, 2500); 
+
+
+INSERT INTO EMPLOYEE VALUES (203, 103, 'Jane', 'Doe', '04/17/1975', '12 B street', 'Los Angeles', 90001, '9255671234', 72500, 3250); 
+
+
+INSERT INTO EMPLOYEE VALUES (204, 102, 'May', 'Lee', '06/16/1979', '14 Bay Drive', 'San Carlos', 94070, '6508881245', 81000, 4700);   
+
+
+INSERT INTO EMPLOYEE VALUES (205, 101, 'Jordan', 'Michael', '02/23/1998', '112 Green Drive', 'Daly City', 94014, '4158782356', 72300, 3170); 
+
+
+INSERT INTO EMPLOYEE VALUES (206, 103, 'Dory', 'Fisher', '11/09/1991', '18 Boat Way', 'Anaheim', 92801, '9257876543', 90000, 621); 
+
+
+INSERT INTO EMPLOYEE VALUES (207, 103, 'Carlos', 'Martinez', '09/15/1983', '557 Scarlet Court', 'Los Angeles', 90001, '9256667451', 78000, 5501); 
+
+
+INSERT INTO EMPLOYEE VALUES (208, 101, 'Isabel', 'Johnson', '08/08/1992', '26 Lakeview Street', 'Redwood City', 94061, '6504542887', 87500, 2810); 
+
+
+INSERT INTO EMPLOYEE VALUES (209, 102, 'Thomas', 'Brown', '07/19/1980', '41 Lions Court', 'Burlingame', 94010, '6502224578', 84000, 4650); 
+
+
+
+SELECT * FROM EMPLOYEE;
+
+
+ 
+INSERT INTO CUSTOMER VALUES (301, 204, 'Anakin', 'Skywalker', '41 Tatooine Drive', 'San Jose', 58970, 'California', 1662663456, 'chosenone@gmail.com'); 
+
+
+INSERT INTO CUSTOMER VALUES (302, 205, 'Levi', 'Mayer', '667 Hanes Ave', 'San Francisco', 94017, 'California', '4156268989', 'levim@gmail.com');  
+
+
+INSERT INTO CUSTOMER VALUES (303, 202, 'Elizabeth', 'James', '45 Skylar Drive', 'San Mateo', 94401, 'California', '6502227878', 'eJames@outlook.com'); 
+
+
+INSERT INTO CUSTOMER VALUES(304, 206, 'Nile', 'Cook', '213 Cory Lake', 'Fremont', 94555, 'California', '3214227878', 'cooknile@gmail.com');
+
+
+INSERT INTO CUSTOMER VALUES (305, 201, 'Bob', 'Portis', '5 Horse Way', 'Hayward', 94401, 'California', '7254456877', 'bobport@aol.com'); 
+
+
+INSERT INTO CUSTOMER VALUES (306, 203, 'Carly', 'Red', '22 Beach Avenue', 'Redondo', 92301, 'California', '9255545664', 'carlyRed@gmail.com');     
+
+
+INSERT INTO CUSTOMER VALUES (307, 204,'Kylie', 'Book', '321 Sunset Blvd', 'Fremont', 91234, 'California', '255545664', 'kyliebook@outlook.com');
+
+
+INSERT INTO CUSTOMER VALUES (308, 205, 'Mason', 'Daniel', '444 Hillside Drive', 'Brisbane', 93214,'California', '6504778989', 'masonDan@outlook.com'); 
+
+
+INSERT INTO CUSTOMER VALUES (309, 206, 'Hailey', 'Barnes', '808 Quinton Street', 'Los Angeles', 90001, 'California',   '9085647898', 'haileyB@gmail.com'); 
+
+
+INSERT INTO CUSTOMER VALUES (310, 207, 'Harrison', 'Carlson', '21 Brooks Drive', 'Los Angeles', 90001,'California', '9254466782', 'harraionCar@aol.com'); 
+
+
+INSERT INTO CUSTOMER VALUES (311, 208, 'Gerald', 'Black', '18 Rose Lane', 'Burlingame', 94072, 'California', '6508874523', 'gerald@gmail.com'); 
+
+
+INSERT INTO CUSTOMER VALUES (312, 209, 'Brenda', 'Jan', '17 Amador Avenue', 'Hillsborough', 91231, 'California', '6505541234', 'JanBrenda@yahoo.com');   
+
+
+INSERT INTO CUSTOMER VALUES (313, 203,  'Owen', 'Miller', '6122 Tulsa', 'San Diego', 91023, 'California', 0002162404, 'Owen_Miller6246@nickia.com');
+
+
+INSERT INTO CUSTOMER VALUES (314, 201, 'Bristol', 'Middleton', '1990 Colombo Boulevard', 'San Francisco',  92341, 'California', 1505328603, 'Bristol_Middleton6490@liret.org');
+
+
+INSERT INTO CUSTOMER VALUES (315, 202, 'Maxwell', 'Egerton', '4454 Abourne Drive', 'Los Angelas', '98745', 'California', 858262714,'Maxwell_Egerton8076@supunk.biz'); 
+
+
+INSERT INTO CUSTOMER VALUES (316, 203, 'Victoria', 'Snow', '6925 Lexington Route','San Diego',95521, 'California', 0681557151, 'Victoria_Snow5773@extex.org');
+
+
+INSERT INTO CUSTOMER VALUES (317, 202, 'Alba', 'Roberts', '2600 Elgood Boulevard', 'San Francisco',  94527, 'California', 3823330407, 'Alba_Roberts6976@guentu.biz'); 
+
+
+INSERT INTO CUSTOMER VALUES (318, 201, 'Vicky' , 'Quinton', '6680 Arlington Alley', 'San Francisco', 98452, 'California', '7801483271', 'Vicky_Quinton1269@qater.org'); 
+
+
+INSERT INTO CUSTOMER VALUES (319, 205, 'Gabriel', 'Oatway', '3759 Westbourne Street',  'San Diego', 97852, 'California',  2410311620, 'Gabriel_Oatway3119@naiker.biz'); 
+
+
+INSERT INTO CUSTOMER VALUES (320, 206, 'Quinn', 'Gavin', 'Boldero   Lane 1626', 'Bellevue', 94520, 'California', 6040183506, 'Quinn_Gavin4792@dionrab.com'); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SELECT * FROM CUSTOMER;
+
+
+ 
+INSERT INTO CUSTOMER_ORDER VALUES (401, 102, 301, 'Lease', '4/20/2022', '5/20/2022', 'VISA:5312-4467-8978');
+
+
+INSERT INTO CUSTOMER_ORDER VALUES (402, 101, 302, 'Trade In', '5/8/2022', '6/8/2022', 'VISA:4457-7878-4512'); 
+
+
+INSERT INTO CUSTOMER_ORDER  VALUES (403, 102, 303, 'Purchase', '1/15/2022', '2/15/2022', 'MasterCard:2315-6544-7887'); 
+
+
+INSERT INTO CUSTOMER_ORDER VALUES (404, 103, 304, 'Purchasee', '3/08/2022', '4/08/2022', 'VISA:4544-3256-4478'); 
+
+
+INSERT INTO CUSTOMER_ORDER VALUES(405, 101, 305, 'Purchase', '2/02/2022', '3/02/2022', 'MasterCard:2234-7845-6554'); 
+
+
+INSERT INTO CUSTOMER_ORDER VALUES (406, 103, 306, 'Purchase', '01/03/2022', '02/03/2022', 'VISA:4512-4789-6523');  
+
+
+INSERT INTO CUSTOMER_ORDER VALUES (407, 102, 307, 'Lease', '6/01/2022', '7/01/2022', 'VISA:8898-7441-5644'); 
+
+
+INSERT INTO CUSTOMER_ORDER VALUES (408, 101, 308, 'Purchase', '07/05/2022', '08/05/2022', 'VISA:8787-7842-8974');  
+
+
+INSERT INTO CUSTOMER_ORDER VALUES (409, 103 , 309, 'Lease', '08/16/2022', '09/16/2022', 'MasterCard:4512-7845-6523'); 
+
+
+INSERT INTO CUSTOMER_ORDER VALUES (410, 103, 310, 'Lease', '05/22/2022', '06/22/2022', 'VISA:4587-9874-4456'); 
+
+
+INSERT INTO CUSTOMER_ORDER VALUES (411, 101, 311, 'Purchase', '11/21/2022', '12/21/2022', 'VISA:4542-9134-1156'); 
+ 
+INSERT INTO CUSTOMER_ORDER VALUES (412, 102, 312, 'Purchase', '03/01/2022', '04/01/2022', 'VISA:4571-2369-8521');  
+
+
+INSERT INTO CUSTOMER_ORDER VALUES (413, 103, 313, 'Purchase', '04/06/2022', '05/06/2022', 'MasterCard:5467-1234-4567');   
+
+
+INSERT INTO CUSTOMER_ORDER VALUES (414, 101 , 314, 'Purchase', '09/04/2022', '10/04/2022', 'VISA:4785-1245-7896');  
+
+
+INSERT INTO CUSTOMER_ORDER VALUES (415, 102 , 315, 'Lease', '10/22/2022', '11/22/2022', 'VISA:5641-4587-8931');  
+
+
+INSERT INTO CUSTOMER_ORDER VALUES (416, 103 , 316, 'Purchase', '12/05/2022', '01/05/2023', 'Mastercard:4512-5678-4745'); 
+
+
+INSERT INTO CUSTOMER_ORDER VALUES (417, 102 , 317, 'Purchase', '05/14/2022', '06/14/2022', 'VISA:4123-5647-4456');  
+
+
+INSERT INTO CUSTOMER_ORDER VALUES (418, 101 ,318, 'Lease', '07/12/2022', '08/12/2022', 'VISA:4123-4512-4568');    
+ 
+INSERT INTO CUSTOMER_ORDER VALUES (419, 101, 319, 'Purchase', '06/21/2022', '07/21/2022', 'VISA:4512-8945-1247');   
+
+
+INSERT INTO CUSTOMER_ORDER VALUES (420, 103, 320, 'Lease', '02/16/2022', '03/16/2022', 'VISA:4715-7859-4123');
+
+
+
+
+
+
+
+
+
+
+
+
+SELECT * FROM CUSTOMER_ORDER;
+
+
+
+
+
+
+
+INSERT INTO ORDER_CONTAINS VALUES (401, 'WBAFF02010LJ14669');
+
+
+INSERT INTO ORDER_CONTAINS VALUES (402, '1B7HF13Y2WJ198530');
+
+
+INSERT INTO ORDER_CONTAINS VALUES (403, 'JKBVNKD167A013982'); 
+
+
+INSERT INTO ORDER_CONTAINS VALUES (404, 'WP0AC29945S692185');  
+
+
+INSERT INTO ORDER_CONTAINS VALUES (405, '1GNDS13S132266223');    
+
+
+INSERT INTO ORDER_CONTAINS VALUES (406, '1FAFP66L0WK258659'); 
+
+
+INSERT INTO ORDER_CONTAINS VALUES (407, 'SCBBR53W36C034889'); 
+
+
+INSERT INTO ORDER_CONTAINS VALUES (408, 'JH4NA1261PT000302'); 
+
+
+INSERT INTO ORDER_Contains VALUES(409, '2HGES15252H603204');  
+
+
+INSERT INTO ORDER_Contains VALUES(410, 'JH4KA3270LC001300'); 
+
+
+INSERT INTO ORDER_Contains VALUES(411, 'JM1BF2325G0V37585'); 
+
+
+INSERT INTO ORDER_Contains VALUES(412, 'WDBAB23ADCB324720'); 
+
+
+INSERT INTO ORDER_Contains VALUES(413, 'JH4DB7540RS001911'); 
+
+
+INSERT INTO ORDER_Contains VALUES(414, 'WD5WD641525381291'); 
+
+
+INSERT INTO order_contains VALUES(415, 'WT1WX124029301231'); 
+
+
+INSERT INTO order_contains VALUES(416, 'JTHBP5C21B5009664'); 
+
+
+INSERT INTO ORDER_Contains VALUES(417, '1GNEK13T7YJ204464'); 
+
+
+INSERT INTO ORDER_CONTAINS VALUES(418, 'JH4KA7680RC011845' ); 
+
+
+INSERT INTO ORDER_CONTAINS VALUES(419, '1J4GZ58S7VC697710' ); 
+
+
+INSERT INTO ORDER_CONTAINS VALUES(420, '1G8ZH528X2Z310309' ); 
+
+SELECT * FROM order_contains;
+
+
+/*Queries*/
+
+SELECT *
+FROM Employee
+WHERE dealershipID =  101
+ORDER BY Salary; 
+
+SELECT *
+	FROM Dealership 
+		WHERE NumberOfChargers > 4 
+		ORDER BY SqrFootage; 
+
+SELECT *
+FROM Customer 
+WHERE City = 'San Francisco'
+ORDER BY FirstName; 
+
+SELECT Commission, FirstName, LastName 
+	FROM Employee 
+		WHERE Commission > 3000
+		ORDER BY Commission; 
+
+SELECT Dealership.DealershipName,  AVG(Employee.Salary) as AvgEmployeeSalary
+FROM Employee INNER JOIN Dealership 
+ON Employee.DealershipID=Dealership.DealershipID
+GROUP BY DealershipName
+ORDER BY DealershipName;
+
+
+
+
+SELECT CO.CustomerOrderID, C.CustomerID, C.Firstname, C.Lastname, V.VIN, CO.OrderType, V.VehicleMileage, V.VehiclePrice, V.BatteryType
+	FROM Customer C, Customer_Order CO, Order_Contains OC, Vehicle V
+	WHERE CO.CustomerOrderID=OC.CustomerOrderID AND
+    C.CustomerID=CO.CustomerID AND
+	OC.VIN=V.VIN AND 
+	V.BatteryType = 'Dual Motor'
+    ORDER BY C.FirstName;
+
+  
+
+
+SELECT DealershipName, COUNT(CustomerOrderID) as TotalOrders 
+FROM Customer_Order INNER JOIN Dealership ON Customer_Order.DealershipID=Dealership.DealershipID
+GROUP BY DealershipName
+ORDER By TotalOrders DESC;
+
+
+
+
+
+
+
+
+
+Logfiles
+
+
+
+
+#
+Time
+Action
+Message
+Duration / Fetch
+3
+1
+11:52:15
+Drop Table IF EXISTS ORDER_CONTAINS
+0 row(s) affected
+0.032 sec
+3
+2
+11:52:15
+Drop Table IF EXISTS CUSTOMER_ORDER
+0 row(s) affected
+0.031 sec
+3
+3
+11:52:15
+Drop Table IF EXISTS CUSTOMER
+0 row(s) affected
+0.016 sec
+3
+4
+11:52:15
+Drop Table IF EXISTS VEHICLE
+0 row(s) affected
+0.016 sec
+3
+5
+11:52:15
+Drop Table IF EXISTS EMPLOYEE
+0 row(s) affected
+0.015 sec
+3
+6
+11:52:15
+Drop Table IF EXISTS DEALERSHIP
+0 row(s) affected
+0.016 sec
+3
+7
+11:52:15
+CREATE TABLE DEALERSHIP (DealershipID integer, DealershipName varchar(50), StreetAddress varchar(30), City varchar(20), ZipCode integer, State varchar(15), PhoneNumber VARCHAR(14), Email varchar(50), NumberOfChargers integer, SqrFootage integer, Constraint Dealership_PK Primary Key (DealershipID) )
+0 row(s) affected
+0.016 sec
+3
+8
+11:52:15
+CREATE TABLE VEHICLE (             VIN varchar(25),             VehicleModel varchar(15),             VehicleYear integer,             VehicleColor varchar(15), VehicleMileage integer, VehiclePrice integer, BatteryType varchar(15), NumberofDoors integer, DateReceived varchar(20), Constraint Vehicle_PK Primary Key (VIN)               )
+0 row(s) affected
+0.016 sec
+3
+9
+11:52:15
+CREATE TABLE EMPLOYEE (EmployeeId integer,     DealershipID integer,     FirstName varchar(15),     LastName varchar(20),     DateOfBirth varchar(15),     StreetAddress varchar(50),     City varchar(50),     ZipCode integer,     PhoneNumber VARCHAR(14),     Salary DECIMAL(8,2),     Commission integer, Constraint Employee_PK Primary Key (EmployeeID), Constraint Employee_Dealership_FK Foreign Key (DealershipID) References DEALERSHIP (DealershipID) )
+0 row(s) affected
+0.031 sec
+3
+10
+11:52:15
+CREATE TABLE CUSTOMER (CustomerID integer,               EmployeeID integer,               FirstName varchar(15),               LastName varchar(15),               StreetAddress varchar(30),               City varchar(20),               ZipCode integer,               State varchar(15),               PhoneNumber varchar(14),        	      Email varchar(50),        	      Constraint Customer_PK Primary Key (CustomerID),               Constraint CUSTOMER_FK Foreign Key (EmployeeID) References EMPLOYEE (EmployeeID)               )
+0 row(s) affected
+0.031 sec
+3
+11
+11:52:15
+CREATE TABLE CUSTOMER_ORDER(               CustomerOrderID integer,               DealershipID int,               CustomerID int,               OrderType varchar(15),        	  CustomerOrderDate varchar(15),               CustomerOrderDue varchar(15),               CustomerOrderBilling varchar(30),               Constraint CustomerOrder_PK Primary Key (CustomerOrderID),               Constraint CustomerOrder_Dealership_FK Foreign Key (DealershipID) References DEALERSHIP (DealershipID),               Constraint CustomerOrder_Customer_FK Foreign Key (CustomerID) References CUSTOMER (CustomerID)               )
+0 row(s) affected
+0.032 sec
+3
+12
+11:52:16
+CREATE TABLE ORDER_CONTAINS (               CustomerOrderID integer,               VIN VARCHAR(17),               Constraint ORDER_CONTAINS_PK Primary Key (CustomerOrderID, VIN),               Constraint ORDER_CONTAINS_VIN_ForeignKey Foreign Key (VIN) References Vehicle (VIN),               Constraint ORDER_CONTAINS_OrderID_FK Foreign Key (CustomerOrderID) References Customer_Order (CustomerOrderID)               )
+0 row(s) affected
+0.031 sec
+3
+13
+11:52:21
+INSERT INTO DEALERSHIP VALUES (101, 'Serramonte Tesla', '1500 Collins Ave', 'Colma', 94014, 'California', 6504882984, 'colma_ordersupport@tesla.com', 4, 21034)
+1 row(s) affected
+0.000 sec
+3
+14
+11:52:21
+INSERT INTO DEALERSHIP VALUES (102, 'Burlingame Tesla', '50 Edwards Court', 'Burlingame', 94010, 'California', 6503421176, 'burlingame_ordersupport@tesla.com', 12, 26132)
+1 row(s) affected
+0.000 sec
+3
+15
+11:52:21
+INSERT INTO DEALERSHIP VALUES (103, 'Los Angeles Tesla', '1200 Dog Street', 'Los Angeles',  93012, 'California', 6614021020, 'LosAngelas_ordersupport@tesla.com', 8, 40123)
+1 row(s) affected
+0.000 sec
+3
+16
+11:52:21
+SELECT * FROM DEALERSHIP LIMIT 0, 1000
+3 row(s) returned
+0.000 sec / 0.000 sec
+3
+17
+11:52:21
+INSERT INTO VEHICLE VALUES ('WBAFF02010LJ14669', 'Model S', 2022, 'White', 375, 93740, 'Dual Motor', 4, '2022-01-05')
+1 row(s) affected
+0.000 sec
+3
+18
+11:52:21
+INSERT INTO VEHICLE VALUES ('1B7HF13Y2WJ198530', 'Model Y', 2022, 'Blue', 330, 62990, 'Dual Motor', 4, '2022-03-07')
+1 row(s) affected
+0.016 sec
+3
+19
+11:52:21
+INSERT INTO VEHICLE VALUES ('JKBVNKD167A013982', 'Model X', 2022, 'Black', 333, 138990, 'Tri Motor', 4, '2022-04-15')
+1 row(s) affected
+0.000 sec
+3
+20
+11:52:21
+INSERT INTO VEHICLE VALUES ('WP0AC29945S692185', 'Model S Plaid', 2021, 'Blue', 396, 135990, 'Tri Motor', 4, '2021-07-23')
+1 row(s) affected
+0.015 sec
+3
+21
+11:52:21
+INSERT INTO VEHICLE VALUES ('1GNDS13S132266223', 'Model X', 2022, 'White', 351, 138990, 'Tri Motor', 4, '2022-02-17')
+1 row(s) affected
+0.000 sec
+3
+22
+11:52:21
+INSERT INTO VEHICLE VALUE ('1FAFP66L0WK258659' , 'Model 3', 2020, 'Silver', 370, 452353, 'Dual Motor', 4, '2021-06-22')
+1 row(s) affected
+0.000 sec
+3
+23
+11:52:21
+INSERT INTO VEHICLE VALUE ('SCBBR53W36C034889', 'Model S', 2022, 'White', 450, 234723, 'Tri Motor', 4, '2021-05-14')
+1 row(s) affected
+0.000 sec
+3
+24
+11:52:21
+INSERT INTO VEHICLE VALUE ('JH4NA1261PT000302', 'Model Y', 2021, 'Black', 369, 451945, 'Dual Motor', 4, '2020-03-11')
+1 row(s) affected
+0.000 sec
+3
+25
+11:52:21
+INSERT INTO VEHICLE VALUE ('2HGES15252H603204', 'Model X', 2022, 'Red', 237, 139012, 'Tri Motor', 4, '2022-02-22')
+1 row(s) affected
+0.000 sec
+3
+26
+11:52:21
+INSERT INTO VEHICLE VALUE ('JH4KA3270LC001300', 'Model 3', 2022, 'White', 451, 134091, 'Dual Motor', 4, '2021-03-22')
+1 row(s) affected
+0.078 sec
+3
+27
+11:52:21
+INSERT INTO VEHICLE VALUE ('JM1BF2325G0V37585', 'Model S', 2021, 'Silver', 821, 519378, 'Dual Motor', 4 ,'2021-06-21')
+1 row(s) affected
+0.000 sec
+3
+28
+11:52:21
+INSERT INTO VEHICLE VALUE ('WDBAB23ADCB324720', 'Model Y', 2020, 'Blue', 412, 834978, 'Dual Motor', 4, '2021-06-21')
+1 row(s) affected
+0.078 sec
+3
+29
+11:52:21
+INSERT INTO VEHICLE VALUE ('JH4DB7540RS001911', 'Model X', 2022, 'Black', 318, 935234, 'Tri Motor', 4, '2022-05-26')
+1 row(s) affected
+0.078 sec
+3
+30
+11:52:21
+INSERT INTO VEHICLE VALUE ('WD5WD641525381291', 'Model 3', 2021, 'Red', 624,  708375, 'Tri Motor', 4, '2020-09-30')
+1 row(s) affected
+0.079 sec
+3
+31
+11:52:21
+INSERT INTO VEHICLE VALUE ('WT1WX124029301231', 'Model S', 2020, 'White', 353,  709175, 'Dual Motor', 4 ,'2022-04-12')
+1 row(s) affected
+0.000 sec
+3
+32
+11:52:21
+INSERT INTO VEHICLE VALUE ('JTHBP5C21B5009664', 'Model 3', 2021, 'Black', 415, 315234, 'Tri Motor', 4, '2021-05-23')
+1 row(s) affected
+0.000 sec
+3
+33
+11:52:21
+INSERT INTO VEHICLE VALUE ('1GNEK13T7YJ204464', 'Model X', 2021, 'Blue', 310, 932334, 'Tri Motor', 4, '2022-09-21')
+1 row(s) affected
+0.000 sec
+3
+34
+11:52:21
+INSERT INTO VEHICLE VALUE ('JH4KA7680RC011845', 'Model S', 2022, 'White', 211, 138232, 'Dual Motor', 4, '2021-03-13')
+1 row(s) affected
+0.015 sec
+3
+35
+11:52:21
+INSERT INTO VEHICLE VALUE ('1J4GZ58S7VC697710', 'Model 3', 2020, 'Black', 398, 912234, 'Tri Motor', 4, '2022-02-01')
+1 row(s) affected
+0.000 sec
+3
+36
+11:52:21
+INSERT INTO VEHICLE VALUE ('1G8ZH528X2Z310309', 'Model X', 2021, 'Blue', 210, 451334, 'Tri Motor', 4, '2021-04-14')
+1 row(s) affected
+0.000 sec
+3
+37
+11:52:21
+SELECT * FROM VEHICLE LIMIT 0, 1000
+20 row(s) returned
+0.000 sec / 0.000 sec
+3
+38
+11:52:21
+INSERT INTO EMPLOYEE VALUES (201, 101, 'Mickey', 'Mouse', '01/01/1990', '1234 Sesame Street', 'San Francisco', 94017, '6505555555', 100000, 5000)
+1 row(s) affected
+0.000 sec
+3
+39
+11:52:21
+INSERT INTO EMPLOYEE VALUES (202, 102, 'John', 'Smith', '05/07/1984', '552 Dream Street', 'Burlingame', 94010, '4157824343', 65000, 2500)
+1 row(s) affected
+0.000 sec
+3
+40
+11:52:21
+INSERT INTO EMPLOYEE VALUES (203, 103, 'Jane', 'Doe', '04/17/1975', '12 B street', 'Los Angeles', 90001, '9255671234', 72500, 3250)
+1 row(s) affected
+0.000 sec
+3
+41
+11:52:21
+INSERT INTO EMPLOYEE VALUES (204, 102, 'May', 'Lee', '06/16/1979', '14 Bay Drive', 'San Carlos', 94070, '6508881245', 81000, 4700)
+1 row(s) affected
+0.016 sec
+3
+42
+11:52:21
+INSERT INTO EMPLOYEE VALUES (205, 101, 'Jordan', 'Michael', '02/23/1998', '112 Green Drive', 'Daly City', 94014, '4158782356', 72300, 3170)
+1 row(s) affected
+0.000 sec
+3
+43
+11:52:21
+INSERT INTO EMPLOYEE VALUES (206, 103, 'Dory', 'Fisher', '11/09/1991', '18 Boat Way', 'Anaheim', 92801, '9257876543', 90000, 621)
+1 row(s) affected
+0.000 sec
+3
+44
+11:52:21
+INSERT INTO EMPLOYEE VALUES (207, 103, 'Carlos', 'Martinez', '09/15/1983', '557 Scarlet Court', 'Los Angeles', 90001, '9256667451', 78000, 5501)
+1 row(s) affected
+0.000 sec
+3
+45
+11:52:21
+INSERT INTO EMPLOYEE VALUES (208, 101, 'Isabel', 'Johnson', '08/08/1992', '26 Lakeview Street', 'Redwood City', 94061, '6504542887', 87500, 2810)
+1 row(s) affected
+0.016 sec
+3
+46
+11:52:21
+INSERT INTO EMPLOYEE VALUES (209, 102, 'Thomas', 'Brown', '07/19/1980', '41 Lions Court', 'Burlingame', 94010, '6502224578', 84000, 4650)
+1 row(s) affected
+0.000 sec
+3
+47
+11:52:21
+SELECT * FROM EMPLOYEE LIMIT 0, 1000
+9 row(s) returned
+0.000 sec / 0.000 sec
+3
+48
+11:52:21
+INSERT INTO CUSTOMER VALUES (301, 204, 'Anakin', 'Skywalker', '41 Tatooine Drive', 'San Jose', 58970, 'California', 1662663456, 'chosenone@gmail.com')
+1 row(s) affected
+0.016 sec
+3
+49
+11:52:21
+INSERT INTO CUSTOMER VALUES (302, 205, 'Levi', 'Mayer', '667 Hanes Ave', 'San Francisco', 94017, 'California', '4156268989', 'levim@gmail.com')
+1 row(s) affected
+0.000 sec
+3
+50
+11:52:21
+INSERT INTO CUSTOMER VALUES (303, 202, 'Elizabeth', 'James', '45 Skylar Drive', 'San Mateo', 94401, 'California', '6502227878', 'eJames@outlook.com')
+1 row(s) affected
+0.000 sec
+3
+51
+11:52:21
+INSERT INTO CUSTOMER VALUES(304, 206, 'Nile', 'Cook', '213 Cory Lake', 'Fremont', 94555, 'California', '3214227878', 'cooknile@gmail.com')
+1 row(s) affected
+0.016 sec
+3
+52
+11:52:21
+INSERT INTO CUSTOMER VALUES (305, 201, 'Bob', 'Portis', '5 Horse Way', 'Hayward', 94401, 'California', '7254456877', 'bobport@aol.com')
+1 row(s) affected
+0.000 sec
+3
+53
+11:52:21
+INSERT INTO CUSTOMER VALUES (306, 203, 'Carly', 'Red', '22 Beach Avenue', 'Redondo', 92301, 'California', '9255545664', 'carlyRed@gmail.com')
+1 row(s) affected
+0.000 sec
+3
+54
+11:52:21
+INSERT INTO CUSTOMER VALUES (307, 204,'Kylie', 'Book', '321 Sunset Blvd', 'Fremont', 91234, 'California', '255545664', 'kyliebook@outlook.com')
+1 row(s) affected
+0.000 sec
+3
+55
+11:52:21
+INSERT INTO CUSTOMER VALUES (308, 205, 'Mason', 'Daniel', '444 Hillside Drive', 'Brisbane', 93214,'California', '6504778989', 'masonDan@outlook.com')
+1 row(s) affected
+0.015 sec
+3
+56
+11:52:21
+INSERT INTO CUSTOMER VALUES (309, 206, 'Hailey', 'Barnes', '808 Quinton Street', 'Los Angeles', 90001, 'California',   '9085647898', 'haileyB@gmail.com')
+1 row(s) affected
+0.000 sec
+3
+57
+11:52:21
+INSERT INTO CUSTOMER VALUES (310, 207, 'Harrison', 'Carlson', '21 Brooks Drive', 'Los Angeles', 90001,'California', '9254466782', 'harraionCar@aol.com')
+1 row(s) affected
+0.000 sec
+3
+58
+11:52:21
+INSERT INTO CUSTOMER VALUES (311, 208, 'Gerald', 'Black', '18 Rose Lane', 'Burlingame', 94072, 'California', '6508874523', 'gerald@gmail.com')
+1 row(s) affected
+0.000 sec
+3
+59
+11:52:21
+INSERT INTO CUSTOMER VALUES (312, 209, 'Brenda', 'Jan', '17 Amador Avenue', 'Hillsborough', 91231, 'California', '6505541234', 'JanBrenda@yahoo.com')
+1 row(s) affected
+0.000 sec
+3
+60
+11:52:21
+INSERT INTO CUSTOMER VALUES (313, 203,  'Owen', 'Miller', '6122 Tulsa', 'San Diego', 91023, 'California', 0002162404, 'Owen_Miller6246@nickia.com')
+1 row(s) affected
+0.000 sec
+3
+61
+11:52:21
+INSERT INTO CUSTOMER VALUES (314, 201, 'Bristol', 'Middleton', '1990 Colombo Boulevard', 'San Francisco',  92341, 'California', 1505328603, 'Bristol_Middleton6490@liret.org')
+1 row(s) affected
+0.000 sec
+3
+62
+11:52:21
+INSERT INTO CUSTOMER VALUES (315, 202, 'Maxwell', 'Egerton', '4454 Abourne Drive', 'Los Angelas', '98745', 'California', 858262714,'Maxwell_Egerton8076@supunk.biz')
+1 row(s) affected
+0.000 sec
+3
+63
+11:52:21
+INSERT INTO CUSTOMER VALUES (316, 203, 'Victoria', 'Snow', '6925 Lexington Route','San Diego',95521, 'California', 0681557151, 'Victoria_Snow5773@extex.org')
+1 row(s) affected
+0.000 sec
+3
+64
+11:52:21
+INSERT INTO CUSTOMER VALUES (317, 202, 'Alba', 'Roberts', '2600 Elgood Boulevard', 'San Francisco',  94527, 'California', 3823330407, 'Alba_Roberts6976@guentu.biz')
+1 row(s) affected
+0.015 sec
+3
+65
+11:52:21
+INSERT INTO CUSTOMER VALUES (318, 201, 'Vicky' , 'Quinton', '6680 Arlington Alley', 'San Francisco', 98452, 'California', '7801483271', 'Vicky_Quinton1269@qater.org')
+1 row(s) affected
+0.000 sec
+3
+66
+11:52:21
+INSERT INTO CUSTOMER VALUES (319, 205, 'Gabriel', 'Oatway', '3759 Westbourne Street',  'San Diego', 97852, 'California',  2410311620, 'Gabriel_Oatway3119@naiker.biz')
+1 row(s) affected
+0.000 sec
+3
+67
+11:52:22
+INSERT INTO CUSTOMER VALUES (320, 206, 'Quinn', 'Gavin', 'Boldero   Lane 1626', 'Bellevue', 94520, 'California', 6040183506, 'Quinn_Gavin4792@dionrab.com')
+1 row(s) affected
+0.000 sec
+3
+68
+11:52:22
+SELECT * FROM CUSTOMER LIMIT 0, 1000
+20 row(s) returned
+0.000 sec / 0.000 sec
+3
+69
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES (401, 102, 301, 'Lease', '4/20/2022', '5/20/2022', 'VISA:5312-4467-8978')
+1 row(s) affected
+0.000 sec
+3
+70
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES (402, 101, 302, 'Trade In', '5/8/2022', '6/8/2022', 'VISA:4457-7878-4512')
+1 row(s) affected
+0.000 sec
+3
+71
+11:52:22
+INSERT INTO CUSTOMER_ORDER  VALUES (403, 102, 303, 'Purchase', '1/15/2022', '2/15/2022', 'MasterCard:2315-6544-7887')
+1 row(s) affected
+0.000 sec
+3
+72
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES (404, 103, 304, 'Purchasee', '3/08/2022', '4/08/2022', 'VISA:4544-3256-4478')
+1 row(s) affected
+0.000 sec
+3
+73
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES(405, 101, 305, 'Purchase', '2/02/2022', '3/02/2022', 'MasterCard:2234-7845-6554')
+1 row(s) affected
+0.000 sec
+3
+74
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES (406, 103, 306, 'Purchase', '01/03/2022', '02/03/2022', 'VISA:4512-4789-6523')
+1 row(s) affected
+0.000 sec
+3
+75
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES (407, 102, 307, 'Lease', '6/01/2022', '7/01/2022', 'VISA:8898-7441-5644')
+1 row(s) affected
+0.000 sec
+3
+76
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES (408, 101, 308, 'Purchase', '07/05/2022', '08/05/2022', 'VISA:8787-7842-8974')
+1 row(s) affected
+0.016 sec
+3
+77
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES (409, 103 , 309, 'Lease', '08/16/2022', '09/16/2022', 'MasterCard:4512-7845-6523')
+1 row(s) affected
+0.000 sec
+3
+78
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES (410, 103, 310, 'Lease', '05/22/2022', '06/22/2022', 'VISA:4587-9874-4456')
+1 row(s) affected
+0.000 sec
+3
+79
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES (411, 101, 311, 'Purchase', '11/21/2022', '12/21/2022', 'VISA:4542-9134-1156')
+1 row(s) affected
+0.000 sec
+3
+80
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES (412, 102, 312, 'Purchase', '03/01/2022', '04/01/2022', 'VISA:4571-2369-8521')
+1 row(s) affected
+0.000 sec
+3
+81
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES (413, 103, 313, 'Purchase', '04/06/2022', '05/06/2022', 'MasterCard:5467-1234-4567')
+1 row(s) affected
+0.000 sec
+3
+82
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES (414, 101 , 314, 'Purchase', '09/04/2022', '10/04/2022', 'VISA:4785-1245-7896')
+1 row(s) affected
+0.000 sec
+3
+83
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES (415, 102 , 315, 'Lease', '10/22/2022', '11/22/2022', 'VISA:5641-4587-8931')
+1 row(s) affected
+0.000 sec
+3
+84
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES (416, 103 , 316, 'Purchase', '12/05/2022', '01/05/2023', 'Mastercard:4512-5678-4745')
+1 row(s) affected
+0.000 sec
+3
+85
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES (417, 102 , 317, 'Purchase', '05/14/2022', '06/14/2022', 'VISA:4123-5647-4456')
+1 row(s) affected
+0.015 sec
+3
+86
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES (418, 101 ,318, 'Lease', '07/12/2022', '08/12/2022', 'VISA:4123-4512-4568')
+1 row(s) affected
+0.000 sec
+3
+87
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES (419, 101, 319, 'Purchase', '06/21/2022', '07/21/2022', 'VISA:4512-8945-1247')
+1 row(s) affected
+0.000 sec
+3
+88
+11:52:22
+INSERT INTO CUSTOMER_ORDER VALUES (420, 103, 320, 'Lease', '02/16/2022', '03/16/2022', 'VISA:4715-7859-4123')
+1 row(s) affected
+0.000 sec
+3
+89
+11:52:22
+SELECT * FROM CUSTOMER_ORDER LIMIT 0, 1000
+20 row(s) returned
+0.000 sec / 0.000 sec
+3
+90
+11:52:22
+INSERT INTO ORDER_CONTAINS VALUES (401, 'WBAFF02010LJ14669')
+1 row(s) affected
+0.000 sec
+3
+91
+11:52:22
+INSERT INTO ORDER_CONTAINS VALUES (402, '1B7HF13Y2WJ198530')
+1 row(s) affected
+0.000 sec
+3
+92
+11:52:22
+INSERT INTO ORDER_CONTAINS VALUES (403, 'JKBVNKD167A013982')
+1 row(s) affected
+0.000 sec
+3
+93
+11:52:22
+INSERT INTO ORDER_CONTAINS VALUES (404, 'WP0AC29945S692185')
+1 row(s) affected
+0.000 sec
+3
+94
+11:52:22
+INSERT INTO ORDER_CONTAINS VALUES (405, '1GNDS13S132266223')
+1 row(s) affected
+0.000 sec
+3
+95
+11:52:22
+INSERT INTO ORDER_CONTAINS VALUES (406, '1FAFP66L0WK258659')
+1 row(s) affected
+0.016 sec
+3
+96
+11:52:22
+INSERT INTO ORDER_CONTAINS VALUES (407, 'SCBBR53W36C034889')
+1 row(s) affected
+0.000 sec
+3
+97
+11:52:22
+INSERT INTO ORDER_CONTAINS VALUES (408, 'JH4NA1261PT000302')
+1 row(s) affected
+0.000 sec
+3
+98
+11:52:22
+INSERT INTO ORDER_Contains VALUES(409, '2HGES15252H603204')
+1 row(s) affected
+0.000 sec
+3
+99
+11:52:22
+INSERT INTO ORDER_Contains VALUES(410, 'JH4KA3270LC001300')
+1 row(s) affected
+0.000 sec
+3
+100
+11:52:22
+INSERT INTO ORDER_Contains VALUES(411, 'JM1BF2325G0V37585')
+1 row(s) affected
+0.000 sec
+3
+101
+11:52:22
+INSERT INTO ORDER_Contains VALUES(412, 'WDBAB23ADCB324720')
+1 row(s) affected
+0.000 sec
+3
+102
+11:52:22
+INSERT INTO ORDER_Contains VALUES(413, 'JH4DB7540RS001911')
+1 row(s) affected
+0.000 sec
+3
+103
+11:52:22
+INSERT INTO ORDER_Contains VALUES(414, 'WD5WD641525381291')
+1 row(s) affected
+0.016 sec
+3
+104
+11:52:22
+INSERT INTO order_contains VALUES(415, 'WT1WX124029301231')
+1 row(s) affected
+0.000 sec
+3
+105
+11:52:22
+INSERT INTO order_contains VALUES(416, 'JTHBP5C21B5009664')
+1 row(s) affected
+0.000 sec
+3
+106
+11:52:22
+INSERT INTO ORDER_Contains VALUES(417, '1GNEK13T7YJ204464')
+1 row(s) affected
+0.000 sec
+3
+107
+11:52:22
+INSERT INTO ORDER_CONTAINS VALUES(418, 'JH4KA7680RC011845' )
+1 row(s) affected
+0.000 sec
+3
+108
+11:52:22
+INSERT INTO ORDER_CONTAINS VALUES(419, '1J4GZ58S7VC697710' )
+1 row(s) affected
+0.000 sec
+3
+109
+11:52:22
+INSERT INTO ORDER_CONTAINS VALUES(420, '1G8ZH528X2Z310309' )
+1 row(s) affected
+0.000 sec
+3
+110
+11:52:22
+SELECT * FROM order_contains LIMIT 0, 1000
+20 row(s) returned
+0.000 sec / 0.000 sec
+3
+111
+11:52:26
+SELECT * FROM Employee WHERE dealershipID =  101 ORDER BY Salary LIMIT 0, 1000
+3 row(s) returned
+0.000 sec / 0.000 sec
+3
+112
+11:52:26
+SELECT * 	FROM Dealership 		WHERE NumberOfChargers > 4 		ORDER BY SqrFootage LIMIT 0, 1000
+2 row(s) returned
+0.016 sec / 0.000 sec
+3
+113
+11:52:26
+SELECT * FROM Customer WHERE City = 'San Francisco' ORDER BY FirstName LIMIT 0, 1000
+4 row(s) returned
+0.000 sec / 0.000 sec
+3
+114
+11:52:26
+SELECT Commission, FirstName, LastName 	FROM Employee 		WHERE Commission > 3000 		ORDER BY Commission LIMIT 0, 1000
+6 row(s) returned
+0.000 sec / 0.000 sec
+3
+115
+11:52:26
+SELECT Dealership.DealershipName,  AVG(Employee.Salary) as AvgEmployeeSalary FROM Employee INNER JOIN Dealership ON Employee.DealershipID=Dealership.DealershipID GROUP BY DealershipName ORDER BY DealershipName LIMIT 0, 1000
+3 row(s) returned
+0.000 sec / 0.000 sec
+3
+116
+11:52:26
+SELECT CO.CustomerOrderID, C.CustomerID, C.Firstname, C.Lastname, V.VIN, CO.OrderType, V.VehicleMileage, V.VehiclePrice, V.BatteryType 	FROM Customer C, Customer_Order CO, Order_Contains OC, Vehicle V 	WHERE CO.CustomerOrderID=OC.CustomerOrderID AND     C.CustomerID=CO.CustomerID AND 	OC.VIN=V.VIN AND 	V.BatteryType = 'Dual Motor'     ORDER BY C.FirstName LIMIT 0, 1000
+9 row(s) returned
+0.000 sec / 0.000 sec
+3
+117
+11:52:26
+SELECT DealershipName, COUNT(CustomerOrderID) as TotalOrders FROM Customer_Order INNER JOIN Dealership ON Customer_Order.DealershipID=Dealership.DealershipID GROUP BY DealershipName ORDER By TotalOrders DESC LIMIT 0, 1000
+3 row(s) returned
+0.000 sec / 0.000 sec
+
