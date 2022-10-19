@@ -1,0 +1,131 @@
+//OurStack.java
+import java.util.EmptyStackException;
+
+public class OurStack<T> implements StackInterface<T> {
+
+    private Node topNode;
+
+    public OurStack() {
+        topNode = null;
+    }
+
+    @Override
+    public void push(T newEntry) {
+        topNode = new Node (newEntry, topNode);
+    }
+
+    @Override
+    public T peek() {
+        if (isEmpty()) {
+            throw new EmptyStackException();
+        } else {
+            return topNode.getData();
+        }
+    }
+
+    @Override
+    public T pop() {
+        T top = peek();
+        assert (topNode != null);
+        topNode = topNode.getNextNode();
+
+        return top;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return topNode == null;
+    }
+
+    @Override
+    public void clear() {
+        topNode = null;
+    }
+
+    private class Node {
+        private T data;
+        private Node next;
+
+        private Node (T dataPortion) {
+            this (dataPortion, null);
+        }
+
+        private Node (T dataPortion, Node linkPortion) {
+            data = dataPortion;
+            next = linkPortion;
+        }
+
+        private T getData() {
+            return data;
+        }
+
+        private void setData (T newData) {
+            data = newData;
+        }
+
+        private Node getNextNode() {
+            return next;
+        }
+
+        private void setNextNode (Node nextNode) {
+            next = nextNode;
+        }
+    }
+}
+//PalindromeChecker.java
+import java.util.Scanner;
+
+public class PalindromeChecker {
+
+    private static boolean isPalindrome(String string) {
+        StackInterface<Character> palindromeStack = new OurStack<>();
+
+
+        string = string.toLowerCase(); //ignores casing on letters
+        string = string.replaceAll("[\\W]",""); 
+
+        String compareString =""; 
+
+        //for loop to push new characters into the stack
+        for (int i=0; i<string.length();i++) {
+            palindromeStack.push(string.charAt(i));
+        }
+
+        //pops out the new characters to compare to the new string
+        while (!palindromeStack.isEmpty()) {
+            compareString += palindromeStack.pop();
+        }
+
+        //true/false statement to see if the string is a palindrome
+        return compareString.equals(string);
+    }
+
+    public static void main(String[] args) {
+ 
+        Scanner input = new Scanner(System.in);
+        System.out.print("[>>] Enter a string (or a ! to exit): ");
+        String string = input.nextLine();
+
+        while (!string.equals("!")) {
+            if (isPalindrome(string)) {
+                System.out.println(" [+] Yes. \"" + string + "\" IS a palindrome!");
+            } else {
+                System.out.println(" [-] No. \"" + string + "\" is NOT a palindrome!");
+            }
+            System.out.print("[>>] Enter a string: ");
+            string = input.nextLine();
+        }
+
+        System.out.println("[<<] Thank you!");
+    }
+}
+//StackInterface.java
+public interface StackInterface<T>
+{
+   public void push(T newEntry);
+   public T pop();
+   public T peek();
+   public boolean isEmpty();
+   public void clear();
+}
+
